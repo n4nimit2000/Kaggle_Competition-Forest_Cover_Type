@@ -1,0 +1,29 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data=pd.read_csv('train.csv')
+x_train=data.iloc[:,1:55].values
+y_train=data.iloc[:,-1].values
+
+data_test=pd.read_csv('test.csv')
+x_test=data_test.iloc[:,1:].values
+y_test=data_test.iloc[:,-1].values
+
+import lightgbm as lgb
+train_data=lgb.Dataset(x_train,label=y_train)
+param = {'num_leaves':150, 'objective':'multiclass','num_class':8,'boosting_type' : 'gbdt','max_depth':10,'learning_rate':.05,'max_bin':200}
+param['metric'] = ['multi_logloss']
+num_round=50
+lgbm=lgb.train(param,train_data,num_round)
+y_pred=lgbm.predict(x_test)
+
+out=[]
+for i in y_pred:
+    t=max(i)
+    for j in range(len(i)):
+        if t==i[j]:
+            out.append(j)
+            break
+y_predict=pd.DataFrame(out)
+y_predict.to_csv('Submit01_14.csv')
