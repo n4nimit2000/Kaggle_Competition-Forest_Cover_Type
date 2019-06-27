@@ -14,9 +14,9 @@ y_test=data_test.iloc[:,-1].values
 
 import lightgbm as lgb
 train_data=lgb.Dataset(x_train,label=y_train)
-param = {'num_leaves':180, 'objective':'multiclass','num_class':8,'boosting_type' : 'gbdt','max_depth':20,'learning_rate':.03,'max_bin':200}
+param = {'num_leaves':600, 'objective':'multiclass','num_class':8,'boosting_type' : 'gbdt','max_depth':30,'learning_rate':.03,'max_bin':900}
 param['metric'] = ['multi_logloss']
-num_round=150
+num_round=800
 lgbm=lgb.train(param,train_data,num_round)
 y_pred=lgbm.predict(x_test)
 
@@ -28,4 +28,4 @@ for i in y_pred:
             out.append(j)
             break
 y_predict=pd.DataFrame(out)
-y_predict.to_csv('Submit01_17.csv')
+y_predict.to_csv('Submit01_23.csv')
